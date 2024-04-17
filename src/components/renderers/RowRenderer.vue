@@ -8,7 +8,8 @@ const props = defineProps<RowRendererProps>()
 const className = 'photo-album__row'
 
 const style = computed<CSSProperties>(() => {
-  const display = 'flex'
+  console.log('Log-- ', props.top, 'props.rowData');
+  const display = "flex"
   const flexFlow = 'row nowrap'
   const alignItems = 'start'
   const justifyContent = 'space-between'
@@ -16,7 +17,8 @@ const style = computed<CSSProperties>(() => {
     props.rowsCount !== undefined && props.rowIndex < props.rowsCount - 1
       ? `${props.layoutOptions.spacing}px`
       : undefined
-  return { display, flexFlow, alignItems, justifyContent, marginBottom }
+
+  return { display, flexFlow, alignItems, justifyContent, marginBottom, position: "absolute", top: props.top + 'px', left: 0 }
 })
 
 const rowWrapper = computed(() => props.renderer ?? 'div')
@@ -32,12 +34,7 @@ const metadata = computed<RowRendererMetadata>(() => {
 </script>
 
 <template>
-  <component
-    :is="rowWrapper"
-    :class="className"
-    :style="style"
-    v-bind="metadata"
-  >
+  <component :is="rowWrapper" :class="className" :style="style" v-bind="metadata">
     <slot />
   </component>
 </template>

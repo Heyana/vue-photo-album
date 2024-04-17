@@ -1,6 +1,7 @@
 <script setup lang="ts" generic="T extends Photo = Photo">
 import type { ComponentPublicInstance, CSSProperties } from 'vue'
 import { computed, ref, toRefs, watch } from 'vue'
+import { fnDebounce } from 'js-funcs'
 import {
   PhotoAlbumProps,
   PhotoAlbumEmits,
@@ -24,6 +25,7 @@ import PhotoRenderer from '@/components/renderers/PhotoRenderer.vue'
 const [Rows, Columns, Masonry] = LayoutTypes
 
 const props = defineProps<PhotoAlbumProps<T>>()
+
 const {
   photos,
   layout,
@@ -131,6 +133,7 @@ const isRowsLayoutOptions = (
 }
 
 const style = computed<CSSProperties>(() => {
+  console.log('Log-- ', rootLayout.value.height, 'rootLayout.value.height');
   let limitedWidth = undefined
   if (layout.value === Rows && isRowsLayoutOptions(layoutOptions.value)) {
     const { padding, spacing, rowConstraints, targetRowHeight } =
@@ -157,12 +160,15 @@ const style = computed<CSSProperties>(() => {
     limitedWidth !== undefined && limitedWidth > 0
       ? `${limitedWidth}px`
       : undefined
+  console.log('Log-- ', rootLayout, 'rootLayout');
   return {
     display: 'flex',
     flexDirection: layout.value === 'rows' ? 'column' : 'row',
     flexWrap: 'nowrap',
+    position: 'relative',
     justifyContent: 'space-between',
-    maxWidth
+    maxWidth,
+    height: (rootLayout.value.height || 0) + 'px'
   }
 })
 
@@ -175,7 +181,13 @@ const containerComponent = computed(() => {
     }
   }
 })
+const rootLayout = ref({
+  height: 0
+})
 
+const rootLayoutChange = fnDebounce((obj) => {
+  rootLayout.value = obj
+}, 16)
 const layoutComponent = computed(() => {
   if (isUnknownLayout.value) {
     return undefined
@@ -185,7 +197,9 @@ const layoutComponent = computed(() => {
       return {
         is: RowsLayout,
         props: {
+          rootLayout,
           photos: photos.value,
+          rootLayoutChange,
           layoutOptions: layoutOptions.value as RowsLayoutOptions,
           rowRenderer: rowRenderer.value
         }
@@ -266,29 +280,16 @@ watch(
 
 <template>
   <!-- container -->
-  <component
-    :is="containerComponent.is"
-    :class="className"
-    :style="style"
-    v-bind="containerComponent.props"
-    ref="containerRef"
-  >
+  <component :is="containerComponent.is" :class="className" :style="style" v-bind="containerComponent.props"
+    ref="containerRef">
     <!-- layout -->
     <div v-if="isUnknownLayout">Unknown Layout</div>
     <template v-else>
-      <component
-        v-if="layoutComponent"
-        :is="layoutComponent.is"
-        v-bind="layoutComponent.props"
-      >
+      <component v-if="layoutComponent" :is="layoutComponent.is" v-bind="layoutComponent.props">
         <!-- photo -->
         <template #default="slotContext">
-          <PhotoRenderer
-            v-bind="slotContext"
-            :renderer="photoRenderer"
-            :clickable="$props.onClick !== undefined"
-            @click="handlePhotoClick($event, slotContext)"
-          />
+          <PhotoRenderer v-bind="slotContext" :renderer="photoRenderer" :clickable="$props.onClick !== undefined"
+            @click="handlePhotoClick($event, slotContext)" />
         </template>
       </component>
     </template>

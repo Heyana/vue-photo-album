@@ -67,6 +67,7 @@ export type RowRendererProps<T extends Photo = Photo> = {
   rowData: { photo: T; layout: PhotoLayout }[]
   rowIndex: number
   rowsCount: number
+  top:number
   renderer?: Component<RowRendererMetadata>
 }
 

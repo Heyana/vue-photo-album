@@ -50,27 +50,27 @@ function srcSetAndSizes<T extends Photo = Photo>(
   const srcset =
     images !== undefined && images.length > 0
       ? images
-          .concat(
-            images.find(({ width }) => width === photo.width) !== undefined
-              ? [{ src: photo.src, width: photo.width, height: photo.height }]
-              : []
-          )
-          .sort((a, b) => a.width - b.width)
-          .map((image) => `${image.src} ${image.width}w`)
-          .join(', ')
+        .concat(
+          images.find(({ width }) => width === photo.width) !== undefined
+            ? [{ src: photo.src, width: photo.width, height: photo.height }]
+            : []
+        )
+        .sort((a, b) => a.width - b.width)
+        .map((image) => `${image.src} ${image.width}w`)
+        .join(', ')
       : undefined
 
   const sizes =
     layoutOptions?.sizes !== undefined
       ? (layoutOptions.sizes.sizes ?? [])
-          .map(
-            ({ viewport, size }) =>
-              `${viewport} ${calculateSizesValue(size, layout, layoutOptions)}`
-          )
-          .concat(
-            calculateSizesValue(layoutOptions.sizes.size, layout, layoutOptions)
-          )
-          .join(', ')
+        .map(
+          ({ viewport, size }) =>
+            `${viewport} ${calculateSizesValue(size, layout, layoutOptions)}`
+        )
+        .concat(
+          calculateSizesValue(layoutOptions.sizes.size, layout, layoutOptions)
+        )
+        .join(', ')
       : `${Math.ceil((layout.width / layoutOptions.containerWidth) * 100)}vw`
 
   return { srcset, sizes }
@@ -82,7 +82,7 @@ const wrapperStyle = computed<CSSProperties>(() => {
   const padding = `${props.layoutOptions.padding}px`
   const marginBottom =
     ['columns', 'masonry'].includes(props.layoutOptions.layout) &&
-    props.layout.photoIndex < props.layout.photosCount - 1
+      props.layout.photoIndex < props.layout.photosCount - 1
       ? `${props.layoutOptions.spacing}px`
       : undefined
   const cursor = props.clickable ? 'pointer' : undefined
@@ -133,6 +133,7 @@ const metadata = computed<PhotoRendererMetadata>(() => ({
   clickable: props.clickable,
   imageProps: imageProps.value
 }))
+console.log('Log-- ', metadata, 'metadata');
 </script>
 
 <template>

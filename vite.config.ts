@@ -1,9 +1,8 @@
-/// <reference types="vitest" />
-import { URL, fileURLToPath } from 'node:url'
-import path from 'node:path'
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import dts from 'vite-plugin-dts'
+import { URL, fileURLToPath } from "node:url";
+import path from "node:path";
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import dts from "vite-plugin-dts";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,33 +10,30 @@ export default defineConfig({
     vue(),
     dts({
       rollupTypes: true,
-      include: ['./src/**/*.ts', './src/**/*.vue']
-    })
+      include: ["./src/**/*.ts", "./src/**/*.vue"],
+    }),
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
   },
   build: {
     minify: false,
-    target: 'es2020',
+    target: "es2020",
     lib: {
-      entry: path.resolve(__dirname, 'src/index.ts'),
-      formats: ['es', 'cjs'],
-      fileName: (format) => `index.${format === 'es' ? 'mjs' : 'js'}`
+      entry: path.resolve(__dirname, "src/index.ts"),
+      formats: ["es", "cjs"],
+      fileName: (format) => `index.${format === "es" ? "mjs" : "js"}`,
     },
     rollupOptions: {
-      external: ['vue'],
+      external: ["vue"],
       output: {
         globals: {
-          Vue: 'vue'
+          Vue: "vue",
         },
-        exports: 'named'
-      }
-    }
+        exports: "named",
+      },
+    },
   },
-  test: {
-    environment: 'jsdom'
-  }
-})
+});
