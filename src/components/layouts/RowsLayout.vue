@@ -64,6 +64,7 @@ const update = (apply?: {
   const parent = dom?.parentElement
   if (!parent) return
 
+  console.log('Log-- ', props.layoutOptions, 'props.layoutOptions');
   if (apply) {
     const ls = computeRowsLayout<T>({
       photos: apply.ls,

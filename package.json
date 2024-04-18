@@ -1,7 +1,7 @@
 {
   "name": "vue-photo-album-fork",
   "private": false,
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Responsive photo gallery component for Vue",
   "type": "module",
   "main": "dist/index.js",
@@ -20,22 +20,9 @@
   "files": [
     "dist"
   ],
-  "author": {
-    "name": "tenthree",
-    "email": "ten.three@hotmail.com"
-  },
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tenthree/vue-photo-album.git"
-  },
-  "homepage": "https://github.com/tenthree/vue-photo-album",
   "engines": {
     "node": ">=18"
-  },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
   },
   "keywords": [
     "vue",
