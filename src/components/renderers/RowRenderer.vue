@@ -8,20 +8,21 @@ const props = defineProps<RowRendererProps>()
 const className = 'photo-album__row'
 
 const style = computed<CSSProperties>(() => {
-  console.log('Log-- ', props.top, 'props.rowData');
   const display = "flex"
   const flexFlow = 'row nowrap'
   const alignItems = 'start'
   const justifyContent = 'space-between'
+  // const gap = (props.gap?.x || 0) + 'px'
   const marginBottom =
     props.rowsCount !== undefined && props.rowIndex < props.rowsCount - 1
       ? `${props.layoutOptions.spacing}px`
       : undefined
 
-  return { display, flexFlow, alignItems, justifyContent, marginBottom, position: "absolute", top: props.top + 'px', left: 0 }
+  return { display, flexFlow, alignItems, justifyContent, marginBottom, position: "absolute", top: (props.data?.top || 0) + 'px', left: 0, width: "100%", boxSizing: "border-box", overflow: "hidden" }
 })
 
 const rowWrapper = computed(() => props.renderer ?? 'div')
+
 
 const metadata = computed<RowRendererMetadata>(() => {
   return {

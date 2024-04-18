@@ -112,6 +112,8 @@ const imageProps = computed<ImgHTMLAttributes>(() => {
   const title = props.photo.title
   const style =
     props.renderer === undefined ? wrapperStyle.value : wrappedStyle.value
+
+
   const loading = 'lazy'
   const decoding = 'async'
   return {
@@ -133,7 +135,6 @@ const metadata = computed<PhotoRendererMetadata>(() => ({
   clickable: props.clickable,
   imageProps: imageProps.value
 }))
-console.log('Log-- ', metadata, 'metadata');
 </script>
 
 <template>

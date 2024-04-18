@@ -19,6 +19,7 @@ function resolveContainerWidth(
         breakpoint <= threshold || index === sorted.length - 1
     )
   }
+
   return width
 }
 

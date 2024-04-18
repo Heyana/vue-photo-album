@@ -34,6 +34,16 @@ export type PhotoAlbumProps<T extends Photo = Photo> = {
   columnRenderer?: Component<ColumnRendererMetadata>
   // Give a custom single root component as photo renderer component that includes defineProps<PhotoRendererMetadata> and an optional default <slot />.
   photoRenderer?: Component<PhotoRendererMetadata>
+
+  loadingRenderer?: Component<any>
+
+  next?:()=>Promise<T[]>
+  
+  gap?:{
+    x?:number,
+    y?:number
+  }
+
 }
 
 export type PhotoAlbumEmits<T extends Photo = Photo> = {
@@ -55,7 +65,7 @@ export type PhotoClickHandler<T extends Photo = Photo> = (
 ) => void
 
 export type PhotoRendererProps<T extends Photo = Photo> = {
-  photo: T
+  photo: any|T
   layout: PhotoLayout
   layoutOptions: LayoutOptions
   clickable?: boolean
@@ -67,7 +77,11 @@ export type RowRendererProps<T extends Photo = Photo> = {
   rowData: { photo: T; layout: PhotoLayout }[]
   rowIndex: number
   rowsCount: number
-  top:number
+  data?: any
+  gap?:{
+    x?:number,
+    y?:number
+  }
   renderer?: Component<RowRendererMetadata>
 }
 
@@ -163,7 +177,7 @@ export type NonOptional<T, K extends keyof T> = Required<Pick<T, K>> &
   Omit<T, K>
 
 export type LayoutPhotoSlotContext<T> = {
-  photo: T
+  photo: any|T
   layout: PhotoLayout
   layoutOptions: LayoutOptions
 }

@@ -1,7 +1,7 @@
 {
   "name": "vue-photo-album-fork",
   "private": false,
-  "version": "0.0.1",
+  "version": "0.0.7",
   "description": "Responsive photo gallery component for Vue",
   "type": "module",
   "main": "dist/index.js",
@@ -68,7 +68,11 @@
     "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
+    "@types/lodash": "^4.17.0",
+    "@types/shortid": "^0.0.32",
     "js-funcs": "^0.0.93",
+    "lodash": "^4.17.21",
+    "shortid": "^2.2.16",
     "vue": "^3.4.23"
   },
   "devDependencies": {
