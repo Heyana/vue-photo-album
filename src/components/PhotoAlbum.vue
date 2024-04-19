@@ -39,9 +39,10 @@ const {
   columnRenderer,
   photoRenderer,
   loadingRenderer,
-  gap
+  gap,
 } = toRefs(props)
 
+const preload = props.preload || [1, 1]
 const photos = ref(props.photos)
 const nextPhotos = ref([] as T[])
 const emit = defineEmits<PhotoAlbumEmits<T>>()
@@ -229,6 +230,7 @@ const layoutComponent = computed(() => {
           photos: photos.value,
           rootLayoutChange,
           pageManeger,
+          preload,
           nextPhotos: nextPhotos.value,
           layoutOptions: layoutOptions.value as RowsLayoutOptions,
           gap: gap.value,
@@ -239,6 +241,7 @@ const layoutComponent = computed(() => {
       return {
         is: ColumnsLayout,
         props: {
+
           photos: photos.value,
           layoutOptions: layoutOptions.value as ColumnsLayoutOptions,
           columnRenderer: columnRenderer.value
@@ -248,6 +251,10 @@ const layoutComponent = computed(() => {
       return {
         is: MasonryLayout,
         props: {
+          rootLayoutChange,
+          pageManeger,
+          preload,
+          nextPhotos: nextPhotos.value,
           photos: photos.value,
           layoutOptions: layoutOptions.value as ColumnsLayoutOptions,
           columnRenderer: columnRenderer.value

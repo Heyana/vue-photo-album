@@ -14,7 +14,7 @@ import * as _ from 'lodash'
 let photos: any[] = []
 const ls = getPhotos({ withUnsplashSourceDomain: true, withSrcset: true })
 
-const imges = _.flattenDeep(new Array(100000).fill(ls))
+const imges = _.flattenDeep(new Array(1000 * 100).fill(ls))
 
 const chunks = _.chunk(imges, 1000)
 
@@ -29,7 +29,7 @@ const next = async () => {
   return chunks[page]
 }
 
-const layout = ref<LayoutType>(LayoutTypes[0])
+const layout = ref<LayoutType>(LayoutTypes[2])
 const padding = ref<number>(5)
 const spacing = ref<number>(0)
 const rowHeight = ref<number>(200)
@@ -119,7 +119,8 @@ const isCustomPhoto = ref<boolean>()
       :columns="applyColumns ? columns : undefined" @click="(payload) => console.log(payload)"
       :container-renderer="isCustomContanier ? CustomContainer : undefined"
       :row-renderer="isCustomRow ? CustomRow : undefined" :column-renderer="isCustomColumn ? CustomColumn : undefined"
-      :photo-renderer="isCustomPhoto ? CustomPhoto : undefined" :loading-renderer="Loading" :gap="{ x: 10, y: 10 }" />
+      :photo-renderer="isCustomPhoto ? CustomPhoto : undefined" :loading-renderer="Loading" :is-virtual="false"
+      :gap="{ x: 10, y: 10 }" />
 
   </div>
 </template>

@@ -42,12 +42,11 @@ function cssColumnWidth({
 
   return `calc((100% - ${round(
     (columnsCount - 1) * spacing +
-      2 * columnsCount * padding +
-      totalAdjustedGaps,
+    2 * columnsCount * padding +
+    totalAdjustedGaps,
     3
-  )}px) * ${round(columnsRatios[columnIndex] / totalRatio, 5)} + ${
-    2 * padding
-  }px)`
+  )}px) * ${round(columnsRatios[columnIndex] / totalRatio, 5)} + ${2 * padding
+    }px)`
 }
 
 const className = 'photo-album__column'
@@ -59,7 +58,7 @@ const style = computed<CSSProperties>(() => {
   const justifyContent = cssJustifyContent(props.layoutOptions)
   const width = cssColumnWidth(props)
 
-  return { display, flexFlow, alignItems, justifyContent, width }
+  return { display, flexFlow, alignItems, justifyContent, width, position: 'relative' }
 })
 
 const columnWrapper = computed(() => props.renderer ?? 'div')
@@ -77,12 +76,7 @@ const metadata = computed<ColumnRendererMetadata>(() => {
 </script>
 
 <template>
-  <component
-    :is="columnWrapper"
-    :class="className"
-    :style="style"
-    v-bind="metadata"
-  >
+  <component :is="columnWrapper" :class="className" :style="style" v-bind="metadata">
     <slot />
   </component>
 </template>

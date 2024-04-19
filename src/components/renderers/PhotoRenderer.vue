@@ -86,7 +86,8 @@ const wrapperStyle = computed<CSSProperties>(() => {
       ? `${props.layoutOptions.spacing}px`
       : undefined
   const cursor = props.clickable ? 'pointer' : undefined
-  return {
+  const base = props.style || {}
+  const map: CSSProperties = {
     display: 'block',
     boxSizing: 'content-box',
     padding,
@@ -94,8 +95,9 @@ const wrapperStyle = computed<CSSProperties>(() => {
     aspectRatio,
     width,
     height: 'auto',
-    cursor
+    cursor, ...base,
   }
+  return map
 })
 
 const wrappedStyle = shallowRef<CSSProperties>({

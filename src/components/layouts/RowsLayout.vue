@@ -16,11 +16,11 @@ const props = defineProps<{
   rootLayoutChange: (obj: any) => void
   layoutOptions: RowsLayoutOptions
   rowRenderer?: Component
-
   gap?: {
     x?: number,
     y?: number
   }
+  preload: number[]
 }>()
 
 defineSlots<{
@@ -31,7 +31,6 @@ const tops: {
   top: number
   height: number
   show: boolean
-
 }[] = reactive([
   {
     top: 0,
@@ -55,7 +54,6 @@ const apply = (mew: T[]) => {
   update({
     ls: mew
   })
-
 }
 const update = (apply?: {
   ls: T[]
@@ -64,7 +62,6 @@ const update = (apply?: {
   const parent = dom?.parentElement
   if (!parent) return
 
-  console.log('Log-- ', props.layoutOptions, 'props.layoutOptions');
   if (apply) {
     const ls = computeRowsLayout<T>({
       photos: apply.ls,

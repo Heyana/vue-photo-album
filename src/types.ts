@@ -1,4 +1,4 @@
-import type { Component, ImgHTMLAttributes } from 'vue'
+import type { Component, CSSProperties, ImgHTMLAttributes } from 'vue'
 
 export const LayoutTypes = ['rows', 'columns', 'masonry'] as const
 export type LayoutType = (typeof LayoutTypes)[number]
@@ -44,6 +44,8 @@ export type PhotoAlbumProps<T extends Photo = Photo> = {
     y?:number
   }
 
+  preload?:number[]
+
 }
 
 export type PhotoAlbumEmits<T extends Photo = Photo> = {
@@ -69,6 +71,7 @@ export type PhotoRendererProps<T extends Photo = Photo> = {
   layout: PhotoLayout
   layoutOptions: LayoutOptions
   clickable?: boolean
+  style?:CSSProperties
   renderer?: Component<PhotoRendererMetadata>
 }
 
@@ -143,6 +146,7 @@ export type PhotoLayout = {
   index: number
   photoIndex: number
   photosCount: number
+  top?:number
 }
 
 export type CommonLayoutOptions = {
