@@ -40,6 +40,10 @@ export type MasonryLayoutModelData<T extends Photo = Photo> = {
 export type ComputeMasonryLayoutProps<T extends Photo = Photo> = {
   photos: T[];
   layoutOptions: ColumnsLayoutOptions;
+  gap: {
+    x: number;
+    y: number;
+  };
   oldModels?: {
     photos: {
       photo: T;
@@ -59,7 +63,7 @@ export type ComputeMasonryLayoutProps<T extends Photo = Photo> = {
 export default function computeMasonryLayout<T extends Photo = Photo>(
   props: ComputeMasonryLayoutProps<T>
 ): MasonryLayoutModel<T> {
-  const { photos, layoutOptions, oldModels } = props;
+  const { photos, layoutOptions, oldModels, gap } = props;
   const { containerWidth, spacing, padding, columns } = layoutOptions;
 
   const columnWidth =
@@ -94,7 +98,7 @@ export default function computeMasonryLayout<T extends Photo = Photo>(
     );
     // update top position by the shortest column index
     columnsCurrentTopPositions[shortestColumnIndex] +=
-      columnWidth / ratio(photo) + spacing + 2 * padding;
+      columnWidth / ratio(photo) + spacing + 2 * padding + gap.y;
     // place a photo into the shortest column
     let columnData = columnsModel[shortestColumnIndex];
     if (!columnData) {
@@ -132,8 +136,10 @@ export default function computeMasonryLayout<T extends Photo = Photo>(
           photoIndex,
           top,
         };
-        const style = {
+        const style: CSSProperties = {
           top: top + "px",
+          padding: `0px ${gap.x / 2}px`,
+          boxSizing: "border-box",
         };
         return { photo, layout, style };
       }),

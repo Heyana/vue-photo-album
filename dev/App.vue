@@ -30,7 +30,7 @@ const next = async () => {
 }
 
 const layout = ref<LayoutType>(LayoutTypes[2])
-const padding = ref<number>(5)
+const padding = ref<number>(0)
 const spacing = ref<number>(0)
 const rowHeight = ref<number>(200)
 const applyRowHeigh = ref<boolean>()
@@ -120,7 +120,7 @@ const isCustomPhoto = ref<boolean>()
       :container-renderer="isCustomContanier ? CustomContainer : undefined"
       :row-renderer="isCustomRow ? CustomRow : undefined" :column-renderer="isCustomColumn ? CustomColumn : undefined"
       :photo-renderer="isCustomPhoto ? CustomPhoto : undefined" :loading-renderer="Loading" :is-virtual="false"
-      :gap="{ x: 10, y: 10 }" />
+      :gap="{ x: 10, y: 50 }" />
 
   </div>
 </template>

@@ -4,7 +4,6 @@ import {
   CSSProperties,
   onMounted,
   ref,
-  toRaw,
   watch,
 } from "vue";
 import { computed } from "vue";
@@ -22,9 +21,9 @@ const props = defineProps<{
     next: () => Promise<void>;
   };
   rootLayoutChange: (obj: any) => void;
-  gap?: {
-    x?: number;
-    y?: number;
+  gap: {
+    x: number;
+    y: number;
   };
   preload: number[]
 }>();
@@ -58,6 +57,7 @@ const update = (photos?: T[], isApply?: boolean) => {
     photos: photos || props.photos,
     layoutOptions: props.layoutOptions,
     oldModels: isApply ? _.cloneDeep(photoRawDatas.value) : ([] as any[]),
+    gap: props.gap
   });
   if (!ls) return;
 

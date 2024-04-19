@@ -8,5 +8,11 @@ const props = defineProps<PhotoRendererMetadata>()
   <div title="custom photo" style="border: 1px solid cyan">
     {{ console.log(props) }}
     <slot />
+    <div  style="height:40px" class='menu'>
+      <div>
+        name
+      </div>
+      <div>size</div>
+    </div>
   </div>
 </template>
