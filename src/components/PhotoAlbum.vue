@@ -205,6 +205,16 @@ const rootLayout = ref({
 })
 
 
+watch(() => props.photos, (newVal) => {
+  console.log('Log-- ', newVal, 'newValue');
+  // pageManeger.next()
+  if (newVal) {
+    photos.value = newVal as any[]
+  } else {
+    photos.value = []
+  }
+  // nextPhotos.value = newVal
+})
 const pageManeger = {
   next: async () => {
     loading.value = true
@@ -294,8 +304,8 @@ watch(
     rowRenderer,
     columnRenderer,
     photoRenderer,
-    loadingRenderer
-
+    loadingRenderer,
+    photos,
   ],
   ([
     containerWidthValue,

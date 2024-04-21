@@ -3,7 +3,7 @@ import RowRenderer from '@/components/renderers/RowRenderer.vue'
 import { LayoutPhotoSlotContext, Photo, RowsLayoutOptions } from '@/types'
 import type { RowsLayoutModelMap } from '@/utils/rows'
 import computeRowsLayout from '@/utils/rows'
-import { Component, onMounted, onUpdated, reactive, ref, watch } from 'vue'
+import { Component, onMounted, reactive, ref, watch } from 'vue'
 const props = defineProps<{
   photos: T[]
   rootLayout: {
@@ -115,13 +115,9 @@ const update = (apply?: {
   //   rowsLayout.value.push(data1.value[idx])
   // })
 }
-onUpdated(() => {
-  if (props.photos.length === 0) return
-  if (tops.length > photoRawDatas.value?.length && photoRawDatas.value.length !== 0) return
+watch(() => props.photos, () => {
   update()
-
 })
-
 
 let nextPromise: Promise<void> | null = null
 const onScroll = (parent: HTMLElement, dom: HTMLElement) => {
@@ -155,13 +151,19 @@ const onScroll = (parent: HTMLElement, dom: HTMLElement) => {
   }
   if (photoRawDatas.value?.length) {
     rowsLayout.value = photoRawDatas.value.slice(start > 0 ? start - 1 : start, end + 2)
+  } else {
+    rowsLayout.value = []
+    props.rootLayoutChange(
+      {
+        height: 0,
+      }
+    )
   }
 
   if (maxLimit > parentHeight && !nextPromise) {
     nextPromise = props.pageManeger.next().then(() => {
       nextPromise = null
     })
-
 
   }
 

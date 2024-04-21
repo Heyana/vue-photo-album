@@ -11,15 +11,24 @@ import { getPhotos } from './photos'
 import { PhotoAlbum } from '@/index'
 import * as _ from 'lodash'
 
-let photos: any[] = []
+let photos = ref([] as any[])
 const ls = getPhotos({ withUnsplashSourceDomain: true, withSrcset: true })
 
 const imges = _.flattenDeep(new Array(1000 * 100).fill(ls))
 
 const chunks = _.chunk(imges, 1000)
 
+setTimeout(() => {
+  photos.value = chunks[0]
+  setTimeout(() => {
+    photos.value = []
+    setTimeout(() => {
+      photos.value = chunks[0]
 
-photos = chunks[0]
+
+    }, 3000)
+  }, 3000)
+}, 300)
 
 let page = 0
 
@@ -29,7 +38,7 @@ const next = async () => {
   return chunks[page]
 }
 
-const layout = ref<LayoutType>(LayoutTypes[2])
+const layout = ref<LayoutType>(LayoutTypes[0])
 const padding = ref<number>(0)
 const spacing = ref<number>(0)
 const rowHeight = ref<number>(200)

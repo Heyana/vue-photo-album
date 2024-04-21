@@ -115,6 +115,54 @@ const onScroll = () => {
       return false;
     }
   };
+  if (photoRawDatas.value?.length > 0) {
+    photoRawDatas.value?.map((map, idx) => {
+      const data: MasonryLayoutModelData = {
+        photos: [],
+        data: map.data,
+      };
+      let start = Infinity
+      let end = -Infinity
+
+
+      const lastData = map.data
+
+
+
+      // const beginIndex = lastData.layout.start ? lastData.layout.start - 10 > 0 ? lastData.layout.start - 10 : 0 : 0
+      // const endIndex = lastData.layout.end ? lastData.layout.end + 10 : map.photos.length
+
+
+
+
+      map.photos.map((photo, idx) => {
+        const has = isHas(photo.layout);
+        if (has) {
+          start = Math.min(start, idx);
+          end = Math.max(end, idx);
+        }
+      });
+      const tStart = start === 0 ? start : start - props.preload[0]
+
+      const tEnd = end + props.preload[1]
+
+
+      lastData.layout.start = tStart
+
+      lastData.layout.end = tEnd
+
+
+      data.photos = map.photos.slice(tStart, tEnd);
+
+      renderDatas.value[idx] = data
+    });
+  } else {
+    renderDatas.value = []
+    props.rootLayoutChange
+      ({
+        height: 0
+      })
+  }
 
   photoRawDatas.value?.map((map, idx) => {
     const data: MasonryLayoutModelData = {
@@ -128,13 +176,11 @@ const onScroll = () => {
     const lastData = map.data
 
 
-    // console.log('Log-- ', lastData.layout, 'lastData.layout');
 
     // const beginIndex = lastData.layout.start ? lastData.layout.start - 10 > 0 ? lastData.layout.start - 10 : 0 : 0
     // const endIndex = lastData.layout.end ? lastData.layout.end + 10 : map.photos.length
 
 
-    // console.log('Log-- ', beginIndex, endIndex, 'beginIndex');
 
 
     map.photos.map((photo, idx) => {
@@ -180,9 +226,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <ColumnRenderer v-for="(column, columnIndex) in renderDatas" :key="`masonry-column-${columnIndex}`"
-    :layout-options="layoutOptions" :column-data="column.photos" :column-index="columnIndex"
-    :columns-count="columnsCount" :renderer="columnRenderer">
+  <ColumnRenderer v-show="renderDatas.length > 0" v-for="(column, columnIndex) in renderDatas"
+    :key="`masonry-column-${columnIndex}`" :layout-options="layoutOptions" :column-data="column.photos"
+    :column-index="columnIndex" :columns-count="columnsCount" :renderer="columnRenderer">
     <template v-for="{ photo, layout, style } in column.photos" :key="photo.key || photo.src">
       <slot v-bind="{
     photo,
