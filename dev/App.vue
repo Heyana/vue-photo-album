@@ -18,18 +18,28 @@ const imges = _.flattenDeep(new Array(1000 * 100).fill(ls))
 
 const chunks = _.chunk(imges, 1000)
 
+// simulate loading
+// setTimeout(() => {
+//   photos.value = chunks[0]
+//   setTimeout(() => {
+//     photos.value = []
+//     setTimeout(() => {
+//       photos.value = chunks[0]
+
+
+//     }, 3000)
+//   }, 3000)
+// }, 300)
+
 setTimeout(() => {
   photos.value = chunks[0]
   setTimeout(() => {
-    photos.value = []
+    photos.value = chunks[0].slice(0, 10)
     setTimeout(() => {
-      photos.value = chunks[0]
-
-
+      photos.value = chunks[0].slice(0, 100)
     }, 3000)
   }, 3000)
 }, 300)
-
 let page = 0
 
 const next = async () => {
@@ -37,6 +47,7 @@ const next = async () => {
   await new Promise(resolve => setTimeout(resolve, 1 * 100))
   return chunks[page]
 }
+
 
 const layout = ref<LayoutType>(LayoutTypes[0])
 const padding = ref<number>(0)
@@ -124,9 +135,8 @@ const isCustomPhoto = ref<boolean>()
     </div>
 
     <PhotoAlbum class="my-photo-album" :photos="photos" :layout="layout" :padding="padding" :spacing="spacing"
-      :next="next" :target-row-height="applyRowHeigh ? rowHeight : undefined"
-      :columns="applyColumns ? columns : undefined" @click="(payload) => console.log(payload)"
-      :container-renderer="isCustomContanier ? CustomContainer : undefined"
+      :next="next" :target-row-height="applyRowHeigh ? rowHeight : undefined" :columns="4"
+      @click="(payload) => console.log(payload)" :container-renderer="isCustomContanier ? CustomContainer : undefined"
       :row-renderer="isCustomRow ? CustomRow : undefined" :column-renderer="isCustomColumn ? CustomColumn : undefined"
       :photo-renderer="isCustomPhoto ? CustomPhoto : undefined" :loading-renderer="Loading" :is-virtual="false"
       :gap="{ x: 10, y: 50 }" />

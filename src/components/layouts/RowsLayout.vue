@@ -3,7 +3,8 @@ import RowRenderer from '@/components/renderers/RowRenderer.vue'
 import { LayoutPhotoSlotContext, Photo, RowsLayoutOptions } from '@/types'
 import type { RowsLayoutModelMap } from '@/utils/rows'
 import computeRowsLayout from '@/utils/rows'
-import { Component, onMounted, reactive, ref, watch } from 'vue'
+import { fnDebounce } from 'js-funcs'
+import { Component, onMounted, ref, watch } from 'vue'
 const props = defineProps<{
   photos: T[]
   rootLayout: {
@@ -31,18 +32,20 @@ const tops: {
   top: number
   height: number
   show: boolean
-}[] = reactive([
-  {
-    top: 0,
-    height: 0,
-    show: false
-  }
-])
+}[] = [
+    {
+      top: 0,
+      height: 0,
+      show: false
+    }
+  ]
 let parentHeight = 0
 
+const allList: any[] = []
 const rowsLayout = ref([] as RowsLayoutModelMap<T>)
 watch(() => props.nextPhotos, (mew, old) => {
   if (mew.length === old.length) return
+  allList.push(...mew)
   apply(mew)
   props.nextPhotos.length = 0
 })
@@ -57,7 +60,8 @@ const apply = (mew: T[]) => {
 }
 const update = (apply?: {
   ls: T[]
-}) => {
+}, photos?: any[]) => {
+
   const dom = document.querySelector('.photo-album') as HTMLElement
   const parent = dom?.parentElement
   if (!parent) return
@@ -74,10 +78,9 @@ const update = (apply?: {
         ...ls
       ] as any[]
     }
-
   } else {
     photoRawDatas.value = computeRowsLayout<T>({
-      photos: props.photos,
+      photos: photos || props.photos,
       layoutOptions: props.layoutOptions,
       gap: props.gap
     }) as any[]
@@ -115,7 +118,16 @@ const update = (apply?: {
   //   rowsLayout.value.push(data1.value[idx])
   // })
 }
+const clean = () => {
+  parentHeight = 0
+  tops.length = 1
+  photoRawDatas.value = []
+  allList.length = 0
+
+}
 watch(() => props.photos, () => {
+  allList.push(...props.photos)
+  clean()
   update()
 })
 
@@ -177,8 +189,18 @@ onMounted(() => {
   parent.addEventListener('scroll', () => {
     onScroll(parent, dom)
   })
+  window.addEventListener("resize", fnDebounce(resize, 100))
+
 
 })
+const resize = () => {
+  const oldList = [...allList]
+  clean()
+  update(undefined, oldList as any)
+  allList.push(...oldList)
+  oldList.length = 0
+
+}
 </script>
 
 <template>

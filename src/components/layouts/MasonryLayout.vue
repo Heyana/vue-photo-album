@@ -11,6 +11,7 @@ import { ColumnsLayoutOptions, LayoutPhotoSlotContext, Photo } from "@/types";
 import computeMasonryLayout, { MasonryLayoutModelDatas, MasonryLayoutModelData } from "@/utils/masonry";
 import ColumnRenderer from "@/components/renderers/ColumnRenderer.vue";
 import _ from "lodash";
+import { fnDebounce } from "js-funcs";
 
 const props = defineProps<{
   photos: T[];
@@ -35,6 +36,8 @@ defineSlots<{
 let parentHeight = 0;
 let onLoadHeight = Infinity
 
+const allList: any[] = []
+
 const photoRawDatas = ref([] as MasonryLayoutModelDatas);
 const renderDatas = ref([] as MasonryLayoutModelDatas);
 
@@ -45,14 +48,27 @@ watch(
     onScroll()
   }
 );
+watch(
+  () => props.photos,
+  () => {
+    clean()
+    allList.push(...props.photos)
+    update();
+    onScroll()
+  }
+);
 
 const photoStyle: CSSProperties = {
   top: 0,
   position: "absolute",
 }
 
-const update = (photos?: T[], isApply?: boolean) => {
+const clean = () => {
+  allList.length = 0
+  parentHeight = 0
 
+}
+const update = (photos?: T[], isApply?: boolean) => {
   const ls = computeMasonryLayout<T>({
     photos: photos || props.photos,
     layoutOptions: props.layoutOptions,
@@ -69,7 +85,6 @@ const update = (photos?: T[], isApply?: boolean) => {
   props.rootLayoutChange({
     height: parentHeight,
   });
-
   photoRawDatas.value = ls as any;
 };
 
@@ -79,7 +94,9 @@ watch(
   () => props.nextPhotos,
   (newData, oldData) => {
     if (newData.length === oldData.length) return;
+    allList.push(...newData)
     apply(newData);
+
     props.nextPhotos.length = 0;
   }
 );
@@ -222,7 +239,19 @@ onMounted(() => {
   parent.addEventListener("scroll", () => {
     onScroll();
   });
+
+  window.addEventListener("resize", fnDebounce(resize, 100))
 });
+
+const resize = () => {
+  const oldList = [...allList]
+  clean()
+  update(oldList)
+  allList.push(...oldList)
+  oldList.length = 0
+  onScroll()
+
+}
 </script>
 
 <template>

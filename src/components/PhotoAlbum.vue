@@ -206,7 +206,6 @@ const rootLayout = ref({
 
 
 watch(() => props.photos, (newVal) => {
-  console.log('Log-- ', newVal, 'newValue');
   // pageManeger.next()
   if (newVal) {
     photos.value = newVal as any[]
